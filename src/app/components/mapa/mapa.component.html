@@ -1,0 +1,55 @@
+
+<mat-card class="centrado float-left mat-elevation-z10" style="width: 30%;">
+  <mat-card-title class="text-center">Agregar marcador</mat-card-title><hr>
+
+  <form class="form-group" [formGroup]="Form">
+    <div class="form-group">
+      <label for="">Latitud</label>
+      <input type="number" class="form-control" formControlName="lat">
+      <mat-error *ngIf="Form.get('lat').getError('min')">
+        La latitud excede el valor minimo
+      </mat-error>
+
+      <mat-error *ngIf="Form.get('lat').getError('max')">
+        La latitud excede el valor maximo
+      </mat-error>
+    </div>
+
+    <div class="form-group">
+      <label for="">Longitud</label>
+      <input type="number" class="form-control" formControlName="lng">
+      <mat-error *ngIf="Form.get('lng').getError('min')">
+        La longitud excede el valor minimo
+      </mat-error>
+
+      <mat-error *ngIf="Form.get('lng').getError('max')">
+        La longitud excede el valor maximo
+      </mat-error>
+    </div>
+
+    <div class="form-group" class="text-center">
+      <button mat-raised-button color="primary" (click)="btnSave()">Guardar</button>
+      <button mat-raised-button color="warn" type="button" style="margin-left:5px">Cancelar</button>
+    </div>
+
+  </form>
+</mat-card>
+
+<mat-card style="width: 65%; margin-left: 2%;" class="float-left mat-elevation-z10">
+    <mat-card-title class="text-center">Mapa con marcadores</mat-card-title><hr>
+
+    <agm-map (mapClick)="newMarker( $event.coords )" [latitude]="lat" [longitude]="lng" [zoom]="15">
+        <agm-marker *ngFor="let marcador  of Marcadores; index as i" [latitude]="marcador.lat" [longitude]="marcador.lng">
+            <agm-info-window [disableAutoPan]="true">
+                <strong class="text-dark">{{marcador.Titulo}}</strong>
+                <p class="text-dark">{{marcador.Descripcion}}</p>
+
+                <div>
+                    <button mat-raised-button color="primary" (click)="EditarMarcador(marcador)">Editar</button>
+                    <button mat-raised-button color="warn" (click)="BorrarMarcador(i)" style="margin-left:5px">Borrar</button>
+                </div>
+            </agm-info-window>
+        </agm-marker>
+    </agm-map>
+</mat-card><br>
+
